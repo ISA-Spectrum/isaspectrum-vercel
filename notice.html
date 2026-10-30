@@ -1,0 +1,138 @@
+<!--
+Copyright (c) 2026 ISA Spectrum
+Copyright (c) 2026 沧海四象
+Licensed under the MIT License.
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公告 - ISA Spectrum</title>
+    <!-- 引入全局公共样式 -->
+    <link rel="stylesheet" href="./common.css">
+    <style>
+        /* 只保留本页面独有：公告列表CSS，导航、全局、页脚样式全部删去 */
+        .notice-container {
+            max-width: 1200px;
+            margin: 80px auto 3rem;
+            padding: 0 5%;
+        }
+
+        .notice-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+
+        .notice-list {
+            list-style: none;
+        }
+
+        .notice-item {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .notice-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .notice-item h3 {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .notice-item p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        .notice-container{width:min(920px,calc(100% - 32px));margin:0 auto;padding:112px 0 0}.notice-title{margin:0;color:var(--ink);border:0;font-size:clamp(38px,7vw,64px);line-height:1;letter-spacing:-.05em}.notice-lead{margin:14px 0 28px;color:var(--muted);font-size:16px}.notice-search{width:100%;min-height:50px;margin-bottom:18px;padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:var(--shadow-sm)}.notice-search:focus{border-color:var(--theme-color);outline:3px solid rgba(33,70,243,.13)}.notice-list{display:grid;gap:12px;margin:0;padding:0}.notice-item{margin:0;padding:0;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow-sm);transform:none!important}.notice-toggle{display:flex;width:100%;align-items:center;justify-content:space-between;gap:20px;padding:20px 22px;border:0;color:var(--ink);background:transparent;text-align:left;font-weight:750;cursor:pointer}.notice-toggle span:last-child{display:grid;flex:0 0 30px;width:30px;height:30px;place-items:center;border-radius:50%;background:var(--theme-soft);color:var(--theme-color);transition:transform .2s}.notice-toggle[aria-expanded="true"] span:last-child{transform:rotate(45deg)}.notice-item p{display:none;margin:0;padding:0 22px 22px;color:#4c5468;line-height:1.8}.notice-item.open p{display:block}.notice-empty{padding:40px;text-align:center;color:var(--muted)}
+    </style>
+    <!-- favicon图标固定保留不动 -->
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="ISA Spectrum" />
+    <link rel="manifest" href="/images/site.webmanifest" />
+</head>
+<body>
+    <!-- 公共头部容器，JS自动加载header.html -->
+    <div id="headerBox"></div>
+
+    <!-- 公告核心区域（页面独有正文原样保留） -->
+    <div class="notice-container">
+        <h1 class="notice-title">站内公告</h1><p class="notice-lead">版本变化、使用说明与社区规则，都在这里。</p><input class="notice-search" id="noticeSearch" type="search" placeholder="搜索公告" aria-label="搜索公告">
+        <ul class="notice-list" id="noticeList">
+            <li class="notice-item">
+                <h3>更新公告 - AI审核</h3>
+                <p>2026年10月16日，ISA Spectrum官方引入了AI审核功能，以提高内容审核的效率和准确性。新功能将自动识别并过滤不当内容，同时保留人工审核作为补充，确保社区环境的健康和谐。但是由于图片审核过于缓慢，超过了Pages Functions的10秒运行上限，我们没有推出图片的自动审核功能，所有带图留言将仍需人工审核。同时，为了确保审核的完备性，我们部署了敏感词库，所有命中敏感词库的留言将会转人工审核。AI和敏感词库的拒绝不会直接让留言变成已删除状态，不会误删大家的留言，谢谢！</p>
+            </li>
+            <li class="notice-item">
+                <h3>更新公告 - v4.0.0</h3>
+                <p>2026年10月1日，ISA Spectrum官方发布了v4.0.0 Beta版本，带来了多项重要更新和改进。如更新UI、接入更安全的认证中心并更换用户登录数据库（不过迁移数据库的时候由于各位的登录密码通过哈希后进行存储、无法读取所以未能迁移，所以老用户在此版本中首次登录时需要通过找回密码界面发送重置邮件并重新设置密码）、新增餐食评分功能等，不过由于是Beta版本，可能存在一些不稳定因素，敬请谅解。</p>
+            </li>
+            <li class="notice-item">
+                <h3>更新公告 - 更换网址</h3>
+                <p>由于公用域名的连坐机制让官方的信誉度一言难尽，2026年8月7日，官方正式将项目迁移至isaspectrum.celestivast.com，并将关停isaspectrum.pages.dev的校墙服务，请各位悉知！</p>
+            </li>
+            <li class="notice-item">
+                <h3>更新公告 - 升级缓存</h3>
+                <p>由于众多用户反应校墙页面加载慢的问题，2026年8月6日，ISA Spectrum官方推出v3.4.2 Beta，在这个版本中图片大小被压缩以保证加载速度和省流，并且添加了缓存规则以确保不需要每次进入都需要重新加载不变的图片。</p>
+            </li>
+            <li class="notice-item">
+                <h3>更新公告 - 客户端</h3>
+                <p>2026年6月9日，ISA Spectrum开放了Mac端下载，在下载得到.dmg后请根据指引完成安装，谢谢！</p>
+            </li>
+            <li class="notice-item">
+                <h3>更新公告 - 客户端</h3>
+                <p>2026年6月7日，ISA Spectrum开放了Windows端下载，适配Win10和Win11，在下载得到.zip压缩包后请根据指引完成安装，谢谢！</p>
+            </li>
+            <li class="notice-item">
+                <h3>更新公告 - 客户端</h3>
+                <p>2026年6月6日，ISA Spectrum官方在优化代码结构后进行手机端测试时发现：手机端的网页并不方便。官方在调查和研究后确认了增加安卓客户端方案的可行性并着手实操，现在在安卓手机端在网页中点击“客户端下载”按钮即可下载安卓客户端（如果识别为未知软件完全是因为没有上架，整个软件的代码都是手搓的，完全可以放心食用），点开即可使用、无需手动更新（自动跟随网站更新），安卓用户可以尝鲜体验。（iOS由于费用、兼容性和证书问题暂未推出，暂时仅开放了部分操作系统的下载，尽请谅解！）</p>
+            </li>
+            <li class="notice-item">
+                <h3>更新公告 - 建楼</h3>
+                <p>应大家的强烈要求，2026年6月5日ISA Spectrum官方正式将校墙改为建楼形式，大家可以自行探索。</p>
+            </li>
+            <li class="notice-item">
+                <h3>更新公告 - 校墙升级</h3>
+                <p>由于大范围邮件通知会降低官方邮箱信誉度并对大家邮箱的正常使用造成干扰，ISA Spectrum官方决定：即日（2026年6月5日）起，将所有原本使用邮件发送的通知改为在站内通知，现在校墙界面“退出登录”按钮的左侧有一个显示当前头像的圆形区域（未上传时是一个灰色圆圈里有一个加号，上传时头像大小不能超过1MB），点击会弹出一个菜单，可以更改头像和查看通知，当有新通知时头像右下角会亮起一个红点，菜单中的“通知中心“右侧也会亮起一个红点，进入通知中心会出现一个弹窗，弹窗中显示所有通知。大家的留言也会显示头像，若匿名发表则头像将被替换为黑色占位符。特此通知!</p>
+            </li>
+            <li class="notice-item">
+                <h3>更新公告 - 登录</h3>
+                <p>鉴于很多同学试图伪造他人身份发信，严重干扰社区秩序，甚至将联系邮箱填写他人邮箱的行为，ISA Spectrum官方决定：即日（2026年5月28日）起，使用校墙功能必须使用邮箱密码登录，大家可以自行进行注册，注册时需要验证邮箱，请务必填写自己的信息（留言仍然支持匿名且发布留言时不会显示联系邮箱）。注册请尽量使用能代表个人的用户名（请勿使用代表他人的用户名或直接使用他人姓名作为用户名，以上行为一经发现封号处理），此外，如果发现上述违规行为，请联系我们，谢谢！</p>
+            </li>
+            <li class="notice-item">
+                <h3>更新公告 - 回复功能</h3>
+                <p>ISA Spectrum校墙页于2026年5月27日正式增加留言回复功能。使用时先在大家的留言中找到想回复的留言，点击回复按钮，填入相关信息以及回复内容并点击发布，待审核通过后即可发布哦。在留言被回复时，留言时留下的联系邮箱会收到一条通知。对其他人留言的回复留言，其昵称下方会有一行“↳ 回复 @xxx（发布人昵称）”，点击即可跳转至被回复的留言。</p>
+            </li>
+            <li class="notice-item">
+                <h3>关于校墙</h3>
+                <p>校墙通过supabase存储桶技术实现了图片的上传和显示，其中电脑端或微信端还可上传多张图片（电脑端Windows按Ctrl/Mac按Cmd即可多选上传，一条留言最多上传五张图片，其中每张图片的大小不得超过5MB），提交后会提醒审核员进行审核，审核通过后会公开显示（不会邮箱通知），如果未通过，原因会发送至邮箱，审核员不一定是作者，如果认为是误审可以点击邮件中的申请复审按钮联系作者。另外，即日（2026年5月27日）起，所有留言必须填写联系邮箱（仅用于消息通知，不会用于其他用途，请务必填写您能定期查看的真实有效的邮箱），否则审核未通过、留言被删除、新增回复等提醒将无法送达您的邮箱。因此，如果您未填写联系邮箱，ISA Spectrum平台将为保证功能完整性和社区交流及时性将不予过审，您的留言也将不会展示在校墙中。</p>
+            </li>
+            <li class="notice-item">
+                <h3>ISA Spectrum公测通知</h3>
+                <p>ISA Spectrum于2026年5月23日开始进行公测，使用Cloudflare Pages进行部署，使用默认网址，后期会更换正式域名。如果想加入我们、发现了一些问题或有发展建议，欢迎联系我们（点击导航栏“联系我们”即可）</p>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 公共页脚容器 -->
+    <div id="footerBox"></div>
+
+    <!-- 全局JS：自动加载头尾+汉堡+导航高亮，本页汉堡JS删掉 -->
+    <script src="./common.js"></script><script src="./notice.js"></script>
+    <!-- 本页面无独有JS，script空着就行，有公告动态再写 -->
+</body>
+</html>
