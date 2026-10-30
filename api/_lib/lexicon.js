@@ -1,13 +1,67 @@
-const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 小时超长缓存，极大节省 Supabase 带宽
+/**
+ * 中文敏感词库匹配器（Vercel 备站版 - Supabase 读取）
+ */
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 备站缓存 24 小时，省钱！
+const MIN_LEN = 2;
+const MAX_LEN = 32;
+const MAX_HITS = 20;
+
 let cache = null;
 
+/**
+ * 归一化。词库侧与待检文本侧必须使用同一函数，否则对不上。
+ */
+export function compact(text) {
+  return String(text)
+    .normalize('NFKC')
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, '');
+}
+
+function buildIndex(rawText, fingerprint) {
+  const set = new Set();
+  const firstChars = new Set();
+  const lengths = new Set();
+  let maxLen = 0;
+  let skipped = 0;
+
+  for (const line of rawText.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const word = compact(trimmed);
+    if (word.length < MIN_LEN || word.length > MAX_LEN) {
+      skipped++;
+      continue;
+    }
+    if (set.has(word)) continue;
+    set.add(word);
+    firstChars.add(word[0]);
+    lengths.add(word.length);
+    if (word.length > maxLen) maxLen = word.length;
+  }
+
+  return {
+    fingerprint,
+    set,
+    firstChars,
+    maxLen,
+    lengths: [...lengths].sort((a, b) => a - b),
+    size: set.size,
+    skipped,
+    loadedAt: Date.now()
+  };
+}
+
+/**
+ * 读取词库。
+ */
 export async function loadLexicon(env) {
   const now = Date.now();
   if (cache && now - cache.loadedAt < CACHE_TTL_MS) return cache;
 
   let rawText = '';
 
-  // 🎯 Vercel 专属逻辑：直接去问 Supabase
+  // 纯 Vercel 逻辑：直接走 Supabase
   if (env?.BUSINESS_SUPABASE_URL && env?.BUSINESS_SUPABASE_PUBLISHABLE_KEY) {
     try {
       const url = `${env.BUSINESS_SUPABASE_URL.replace(/\/$/, '')}/rest/v1/lexicon?select=word`;
@@ -21,7 +75,7 @@ export async function loadLexicon(env) {
       if (resp.ok) {
         const rows = await resp.json();
         rawText = rows.map(r => r.word).join('\n');
-        console.log(`[Lexicon] Vercel 端从 Supabase 成功加载了 ${rows.length} 个敏感词`);
+        console.log(`[Lexicon] Vercel 从 Supabase 加载了 ${rows.length} 个敏感词`);
       } else {
         console.error('[Lexicon] Supabase 读取失败，状态码:', resp.status);
       }
@@ -30,20 +84,47 @@ export async function loadLexicon(env) {
     }
   }
 
-  // 🛡️ Fail-Safe 兜底：只要没拿到词库，直接返回 null，让外层强制转人工
+  // Fail-Safe 兜底
   if (!rawText) {
-    console.error('[Lexicon] 词库彻底失效！触发 Fail-Safe');
+    console.error('[Lexicon] Vercel 词库彻底失效，返回 null');
     return null; 
   }
 
-  // 计算指纹，如果和缓存一样就不重新构建索引
   const fingerprint = `${rawText.length}:${rawText.slice(0, 48)}`;
   if (cache && cache.fingerprint === fingerprint) {
     cache.loadedAt = now;
     return cache;
   }
 
-  // 构建索引（buildIndex 是你原本文件底部的函数，保留不动）
   cache = buildIndex(rawText, fingerprint);
   return cache;
+}
+
+/**
+ * 🎯 补上的关键函数：扫描文本，这就是报错里缺失的那个！
+ */
+export function scanLexicon(text, lex) {
+  const miss = { hit: false, words: [] };
+  if (!lex || !lex.size || !text) return miss;
+
+  const haystack = compact(text);
+  const n = haystack.length;
+  if (!n) return miss;
+
+  const lengths = lex.lengths;
+  const hits = new Set();
+
+  for (let i = 0; i < n; i++) {
+    if (!lex.firstChars.has(haystack[i])) continue;
+    for (let k = 0; k < lengths.length; k++) {
+      const len = lengths[k];
+      if (i + len > n) break;
+      if (lex.set.has(haystack.slice(i, i + len))) {
+        hits.add(haystack.slice(i, i + len));
+        if (hits.size >= MAX_HITS) return { hit: true, words: [...hits] };
+      }
+    }
+  }
+
+  return { hit: hits.size > 0, words: [...hits] };
 }
