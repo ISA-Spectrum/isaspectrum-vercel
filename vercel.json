@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "/api/api/:path*" 
+      "destination": "/api/api/:path*"
     },
     {
       "source": "/auth/:path*",
@@ -12,12 +12,24 @@
   ],
   "headers": [
     {
-      "source": "/api/(.*)",
+      "source": "/(api|auth)/(.*)",
       "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "https://isaspectrum.celestivast.com" },
-        { "key": "Access-Control-Allow-Credentials", "value": "true" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE, OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://isaspectrum.celestivast.com"
+        },
+        {
+          "key": "Access-Control-Allow-Credentials",
+          "value": "true"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
       ]
     }
   ]

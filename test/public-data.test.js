@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
-import { onRequestGet as listMessagesApi } from '../functions/api/messages.js';
+import { onRequestGet as listMessagesApi } from '../api/api/messages.js';
 
 const source = await readFile(new URL('../public-data.js', import.meta.url), 'utf8');
 

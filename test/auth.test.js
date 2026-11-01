@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getConfig } from '../functions/_lib/config.js';
-import { sha256Base64Url } from '../functions/_lib/crypto.js';
-import { cookieNames, oauthErrorRedirect, safeReturnPath, setCookie } from '../functions/_lib/http.js';
-import { buildAuthorizationUrl, exchangeCode, verifyIdToken } from '../functions/_lib/oidc.js';
-import { authenticateApi } from '../functions/_lib/api.js';
-import { onRequestGet as startLogin } from '../functions/auth/login.js';
-import { callbackErrorCode, onRequestGet as finishLogin } from '../functions/auth/callback.js';
-import { onRequestPost as logoutSession } from '../functions/auth/logout.js';
+import { getConfig } from '../api/_lib/config.js';
+import { sha256Base64Url } from '../api/_lib/crypto.js';
+import { cookieNames, oauthErrorRedirect, safeReturnPath, setCookie } from '../api/_lib/http.js';
+import { buildAuthorizationUrl, exchangeCode, verifyIdToken } from '../api/_lib/oidc.js';
+import { authenticateApi } from '../api/_lib/api.js';
+import { onRequestGet as startLogin } from '../api/auth/login.js';
+import { callbackErrorCode, onRequestGet as finishLogin } from '../api/auth/callback.js';
+import { onRequestPost as logoutSession } from '../api/auth/logout.js';
 
 function config(overrides = {}) {
   return getConfig({
@@ -195,7 +195,7 @@ test('authorization callback consumes D1 state and uses an RLS-scoped database t
     BUSINESS_SUPABASE_URL: storeOrigin,
     BUSINESS_SUPABASE_PUBLISHABLE_KEY: 'publishable-test',
     BUSINESS_SUPABASE_SIGNING_JWK: JSON.stringify(databaseJwk),
-    AUTH_DB: d1
+    AUTH_STORE: 'd1', AUTH_DB: d1
   };
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (input, init = {}) => {
@@ -253,7 +253,7 @@ test('authorization callback consumes D1 state and uses an RLS-scoped database t
     env
   });
   assert.equal(completed.status, 303);
-  assert.equal(completed.headers.get('location'), '/details.html?id=9');
+  assert.equal(completed.headers.get('location'), 'https://isaspectrum.celestivast.com/details.html?id=9');
   assert.match(completed.headers.get('set-cookie'), /__Secure-business_session=/);
   assert.match(sessionRecord.user_id, /^[0-9a-f-]{36}$/);
   assert.deepEqual(sessionRecord.amr, ['webauthn']);
@@ -269,7 +269,7 @@ test('authorization callback consumes D1 state and uses an RLS-scoped database t
     env
   });
   assert.equal(replayed.status, 303);
-  assert.equal(replayed.headers.get('location'), '/login.html?error=state_mismatch');
+  assert.equal(replayed.headers.get('location'), 'https://isaspectrum.celestivast.com/login.html?error=state_mismatch');
 });
 
 test('callback failures keep their precise cause instead of collapsing into invalid_id_token', () => {
@@ -418,7 +418,7 @@ test('a failing callback reports the real cause to the login page and logs its s
     AUTH_REDIRECT_URI: `${businessOrigin}/auth/callback`,
     BUSINESS_SUPABASE_URL: 'https://store.supabase.co',
     BUSINESS_SUPABASE_PUBLISHABLE_KEY: 'publishable-test',
-    AUTH_DB: d1
+    AUTH_STORE: 'd1', AUTH_DB: d1
   };
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async input => {
@@ -449,7 +449,7 @@ test('a failing callback reports the real cause to the login page and logs its s
     env
   });
   assert.equal(failed.status, 303);
-  assert.equal(failed.headers.get('location'), '/login.html?error=id_token_audience_mismatch');
+  assert.equal(failed.headers.get('location'), 'https://isaspectrum.celestivast.com/login.html?error=id_token_audience_mismatch');
   assert.ok(
     logs.some(line => line.includes('stage=id-token-verification') && line.includes('invalid_id_token_audience')),
     `expected a diagnostic log, got: ${logs.join(' | ')}`
@@ -465,7 +465,7 @@ function logoutEnv(env) {
     AUTH_REDIRECT_URI: `https://business-${env}.example.com/auth/callback`,
     BUSINESS_SUPABASE_URL: 'https://store.supabase.co',
     BUSINESS_SUPABASE_PUBLISHABLE_KEY: 'publishable-test',
-    AUTH_DB: {
+    AUTH_STORE: 'd1', AUTH_DB: {
       prepare() {
         return {
           bind(...args) { this.args = args; return this; },

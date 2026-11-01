@@ -56,11 +56,9 @@ export function onRequest() {
 export const config = { runtime: 'edge' };
 
 export default async function handler(request) {
-  // 把 Vercel 的 process.env 伪装成 CF 的 env 传进去
   const context = { request, env: process.env };
-  
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204 });
   if (request.method === 'GET') return onRequestGet(context);
   if (request.method === 'PUT') return onRequestPut(context);
-  
   return onRequest();
 }
