@@ -9,7 +9,7 @@ ISA Wuhan 校园社区平台
 
 ## 项目介绍
 ISA Spectrum 是专为 **ISA Wuhan** 设计的校园社区网站，面向师生与社群成员提供信息交流、社区互动的线上平台。
-项目采用静态前端、Cloudflare Pages Functions 与业务 Supabase 数据库。用户认证由独立 OIDC 认证中心负责，本站只维护业务身份与业务 Session。
+项目采用静态前端、Vercel 与业务 Supabase 数据库。用户认证由独立 OIDC 认证中心负责，本站只维护业务身份与业务 Session。
 
 ## 核心功能
 - 校园社区内容浏览与展示
@@ -20,10 +20,10 @@ ISA Spectrum 是专为 **ISA Wuhan** 设计的校园社区网站，面向师生�
 
 ## 技术栈
 - 前端：HTML、CSS、JavaScript
-- 后端：Cloudflare Pages Functions
+- 后端：Vercel
 - 数据库：Supabase（业务数据，不作为本站浏览器登录态）
 - 登录：OAuth 2.0 Authorization Code + PKCE / OpenID Connect
-- 部署方式：Cloudflare Pages
+- 部署方式：Vercel
 
 ## 第三方组件说明
 本项目内容审核功能使用 [konsheng/Sensitive‑lexicon](https://github.com/konsheng/Sensitive‑lexicon) 的敏感词条数据集，遵循 **MIT License**。

@@ -9,7 +9,7 @@ The ISA Wuhan Campus Community Platform
 
 ## About The Project
 ISA Spectrum is a campus community website designed exclusively for **ISA Wuhan**. It serves as an online platform for information exchange and community interaction, connecting students, teachers, and all members of the ISA community.
-The project uses a static frontend, Cloudflare Pages Functions, and a business Supabase database. Authentication is delegated to an independent OpenID Provider; this site owns only business identity mappings and business sessions.
+The project uses a static frontend, Vercel, and a business Supabase database. Authentication is delegated to an independent OpenID Provider; this site owns only business identity mappings and business sessions.
 
 ## Key Features
 - Browse and display campus community content
@@ -20,10 +20,10 @@ The project uses a static frontend, Cloudflare Pages Functions, and a business S
 
 ## Built With
 - Frontend: HTML, CSS, JavaScript
-- Backend: Cloudflare Pages Functions
+- Backend: Vercel
 - Database: Supabase for business data
 - Authentication: OAuth 2.0 Authorization Code + PKCE / OpenID Connect
-- Deployment: Cloudflare Pages
+- Deployment: Vercel
 
 ## Getting Started Locally
 1. Clone the repository to your local machine
