@@ -1,5 +1,17 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/project-paused",
+      "statusCode": 303
+    },
+    {
+      "source": "/:path((?!project-paused).*)",
+      "destination": "/project-paused",
+      "statusCode": 303
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/:path*",
